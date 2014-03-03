@@ -3,28 +3,42 @@ package com.jhttpserver.core;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 public class WebServer {
-	public static final int  PORT =8000;
+	/** port */
+	public static final int PORT = 8000;
+	/** main server */
+	private ServerSocket serverSocket = null;
+
+	ThreadPoolExecutor excutor = new ThreadPoolExecutor(2, 5, 2,
+			TimeUnit.MINUTES, new LinkedBlockingQueue<Runnable>(10));
+
 	public static void main(String[] args) {
-		ServerSocket sock = null;
-		Thread connect = null;
+		WebServer server = new WebServer();
+		server.initServer();
+		server.startServer();
+	}
+
+	private void initServer() {
 		try {
-			sock = new ServerSocket(PORT);
+			serverSocket = new ServerSocket(PORT);
 		} catch (IOException e1) {
-			System.out.println("web server listened in port "+PORT);
+			System.out.println("web server faild!");
 		}
+		System.out.println("web server listened in port " + PORT);
+	}
+
+	private void startServer() {
 		while (true) {
 			try {
-				Socket connection = sock.accept();
-				// 创建处理线程
-				connect = new WebServerConnection(connection);
-				connect.start();
-				System.out.println("WebServer-->receive request No."+connect.getId());				
+				Socket connection = serverSocket.accept();
+				excutor.submit(new ConnectionHandler(connection));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 	}
-
 }

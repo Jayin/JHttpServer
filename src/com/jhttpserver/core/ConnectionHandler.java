@@ -6,20 +6,14 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.Socket;
 
-
-class WebServerConnection extends Thread {
+public class ConnectionHandler implements Runnable {
 	Socket connection;
 	private long start = 0;
 	private long end = 0;
-
-	public WebServerConnection(Socket connection) {
-		super();
+	public ConnectionHandler(Socket connection){
 		this.connection = connection;
-		this.setName("Request No. " + this.getId());
-		System.out.println(connection.toString());
 		start = System.currentTimeMillis();
 	}
-
 	@Override
 	public void run() {
 		Writer response = null;
@@ -38,7 +32,6 @@ class WebServerConnection extends Thread {
 			response = new OutputStreamWriter(connection.getOutputStream());
 			response.write(content, 0, content.length());
 			
-			
 			end = System.currentTimeMillis();
 			System.out.println("response cost:"+(end-start)+"ms");
 		} catch (Exception e) {
@@ -52,4 +45,5 @@ class WebServerConnection extends Thread {
 			}
 		}
 	}
+
 }
