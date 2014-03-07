@@ -29,22 +29,26 @@ public class ConnectionHandler implements Runnable {
 			String line = null;
 			while ((line = br.readLine()) != null) {
 				request.append(line).append("\n");
-				System.out.println(line);
 				if (line.trim().equals("")) {
 					break;
 				}
 			}
-
+           //parse initial line 
 			RequestInfo info = RequestParser.parse(request.toString().split(
 					"\n"));
-			System.out.println("INFO");
-			System.out.println(info.toString());
-			String content = "hello JHttpServer";
+			int statusCode = 200;
+			String responseHeader = "HTTP/1.1 " + statusCode + " OK\n";
+			String content = "Hello JHttpServer";
 			response = new OutputStreamWriter(connection.getOutputStream());
+			response.write(responseHeader , 0, responseHeader.length());
+			response.write('\n');
 			response.write(content, 0, content.length());
-
+			response.flush();
+			
+			//print info
 			end = System.currentTimeMillis();
-			System.out.println("response cost:" + (end - start) + "ms");
+			System.out.println(info.getMethod() + " " + info.getPath() + " "
+					+ (end - start) + "ms");
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
