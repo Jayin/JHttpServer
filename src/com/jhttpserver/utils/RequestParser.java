@@ -11,22 +11,30 @@ import com.jhttpserver.entity.Request;
 public class RequestParser {
 
 	public static Request parse(String[] headers) {
-		Request requestInfo = new Request();
+		Request request = new Request();
 		// 解析第一行
 		String initial_line = headers[0];
-		parseLine1(requestInfo, initial_line);
-		return requestInfo;
+		parseInitialLine(request, initial_line);
+		for (int i = 1; i < headers.length; i++) {
+			String h = headers[i];
+			String name = h.split(":")[0].trim();
+			String value = h.split(":")[1].trim();
+			request.addHeader(name, value);
+		}
+		return request;
 	}
 
-	private static void parseLine1(Request req, String initial_line) {
+	// 解析请求报头
+	private static void parseInitialLine(Request req, String initial_line) {
 		String[] s = initial_line.split(" ");
 		req.setMethod(s[0]);
-		req.setPath(s[1]);
+		req.setPath(s[1].substring(0, s[1].indexOf("?") == -1 ? s[1].length()
+				: s[1].indexOf("?")));
 		req.setHttpVersion(s[2]);
 		// parse the querystring
 		if (s[1].contains("?")) {
-			String[] query = s[1].substring(s[1].indexOf('?') +1,
-					s[1].length() ).split("&");
+			String[] query = s[1].substring(s[1].indexOf('?') + 1,
+					s[1].length()).split("&");
 			for (String _s : query) {
 				String key = _s.split("=")[0];
 				String value = _s.split("=")[1];

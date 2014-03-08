@@ -7,7 +7,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import com.jhttpserver.interfaces.IResponse;
+import com.jhttpserver.entity.Request;
+import com.jhttpserver.entity.Response;
+import com.jhttpserver.interfaces.Execution;
 import com.jhttpserver.interfaces.IWebServer;
 
 /**
@@ -39,7 +41,7 @@ public class WebServer implements IWebServer {
 		}
 	}
 
-	public void startServer(int port) {
+	public void listen(int port) {
 		initServer(port);
 		if (status == Status_Staring) {
 			System.out.println("web server listened in port:" + port);
@@ -47,12 +49,18 @@ public class WebServer implements IWebServer {
 		while (true) {
 			try {
 				Socket connection = serverSocket.accept();
-				excutor.submit(new ConnectionHandler(connection));
+				excutor.submit(new ConnectionHandler(connection,
+						new Execution() {
+
+							@Override
+							public void onExecute(Request req, Response res) {
+								res.send("Hello world");
+							}
+						}));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 	}
-	
- 
+
 }
