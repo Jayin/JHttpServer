@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.util.HashMap;
 
 import com.jhttpserver.entity.Request;
 import com.jhttpserver.entity.Response;
@@ -17,10 +18,11 @@ public class ConnectionHandler implements Runnable {
 	private Request request;
 	private Response response;
 	private Execution exe;
+	HashMap<String,Execution> handlers;
 
-	public ConnectionHandler(Socket connection, Execution exe) {
+	public ConnectionHandler(Socket connection, HashMap<String,Execution> handlers) {
 		this.connection = connection;
-		this.exe = exe;
+	    this.handlers = handlers;
 	}
 
 	@Override
@@ -28,8 +30,11 @@ public class ConnectionHandler implements Runnable {
 		try {
 			onStart();
 			onParseBody();
+			exe = handlers.get(request.getPath());
 			if (exe != null) {
 				exe.onExecute(request, response);
+			}else{
+			    response.send(404, "Not found page");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
