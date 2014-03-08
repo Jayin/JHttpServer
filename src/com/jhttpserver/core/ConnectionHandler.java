@@ -18,11 +18,12 @@ public class ConnectionHandler implements Runnable {
 	private Request request;
 	private Response response;
 	private Execution exe;
-	HashMap<String,Execution> handlers;
+	HashMap<String, Execution> handlers;
 
-	public ConnectionHandler(Socket connection, HashMap<String,Execution> handlers) {
+	public ConnectionHandler(Socket connection,
+			HashMap<String, Execution> handlers) {
 		this.connection = connection;
-	    this.handlers = handlers;
+		this.handlers = handlers;
 	}
 
 	@Override
@@ -30,11 +31,13 @@ public class ConnectionHandler implements Runnable {
 		try {
 			onStart();
 			onParseBody();
-			exe = handlers.get(request.getPath());
-			if (exe != null) {
-				exe.onExecute(request, response);
-			}else{
-			    response.send(404, "Not found page");
+			if (request != null) {
+				exe = handlers.get(request.getPath());
+				if (exe != null) {
+					exe.onExecute(request, response);
+				} else {
+					response.send(404, "Not found page");
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

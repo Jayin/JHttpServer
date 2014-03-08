@@ -5,12 +5,14 @@ import java.io.OutputStream;
 
 /**
  * 响应
+ * 
  * @author Jayin Ton
  * 
  */
 public class Response {
 
 	private OutputStream out;
+	private String contentType;
 
 	public Response(OutputStream outputStream) {
 		this.out = outputStream;
@@ -20,6 +22,7 @@ public class Response {
 		String statusLine = "HTTP/1.1 " + statusCode + " OK\n";
 		try {
 			out.write(statusLine.getBytes());
+			out.write(("content-type:"+getContentType()+"\n").getBytes());
 			out.write("\n".getBytes());
 			out.write(content.getBytes());
 			out.flush();
@@ -38,6 +41,14 @@ public class Response {
 
 	public void send(String content) {
 		send(200, content);
+	}
+
+	public String getContentType() {
+		return contentType == null ? "text/html" : contentType;
+	}
+
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
 	}
 
 }
