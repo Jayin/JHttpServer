@@ -6,7 +6,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.Socket;
 
-import com.jhttpserver.entity.RequestInfo;
+import com.jhttpserver.entity.Request;
 import com.jhttpserver.utils.RequestParser;
 
 public class ConnectionHandler implements Runnable {
@@ -34,7 +34,7 @@ public class ConnectionHandler implements Runnable {
 				}
 			}
            //parse initial line 
-			RequestInfo info = RequestParser.parse(request.toString().split(
+			Request info = RequestParser.parse(request.toString().split(
 					"\n"));
 			int statusCode = 200;
 			String responseHeader = "HTTP/1.1 " + statusCode + " OK\n";

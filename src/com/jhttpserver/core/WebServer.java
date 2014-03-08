@@ -7,6 +7,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import com.jhttpserver.interfaces.IResponse;
 import com.jhttpserver.interfaces.IWebServer;
 
 /**
@@ -52,10 +53,6 @@ public class WebServer implements IWebServer {
 			}
 		}
 	}
-
-	@Override
-	public void send(String content) {
-		 
-		
-	}
+	
+ 
 }

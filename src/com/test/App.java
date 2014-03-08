@@ -7,5 +7,4 @@ public class App {
 		WebServer server = new WebServer();
 		server.startServer(WebServer.DefaultPort);
 	}
-
 }
