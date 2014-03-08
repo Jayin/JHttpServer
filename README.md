@@ -1,7 +1,7 @@
 JHttpServer
 ===========
-A simple http server
-
+A simple http server implement in Java
+:
 Example
 ===
 ```java
@@ -26,3 +26,7 @@ Example
 		
 		server.listen(WebServer.DefaultPort);
 ```
+
+License
+===
+MIT
