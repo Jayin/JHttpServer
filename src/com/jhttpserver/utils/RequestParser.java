@@ -9,34 +9,22 @@ import com.jhttpserver.entity.Request;
  * 
  */
 public class RequestParser {
-
-	public static Request parse(String[] headers) {
-		Request request = new Request();
-		// 解析第一行
-		String initial_line = headers[0];
-		if(parseInitialLine(request, initial_line)){
-			for (int i = 1; i < headers.length; i++) {
-				String h = headers[i];
-				String name = h.split(":")[0].trim();
-				String value = h.split(":")[1].trim();
-				request.addHeader(name, value);
-			}
-			return request;
-		}
-		return null;
-	}
-
-	// 解析请求报头
-	private static boolean parseInitialLine(Request req, String initial_line) {
-		if(initial_line==null || initial_line.equals("")){
+	/**
+	 * 解析请求initial_line
+	 * 
+	 * @param request
+	 * @param initial_line
+	 * @return
+	 */
+	public static boolean parseInitialLine(Request request, String initial_line) {
+		if (initial_line == null || initial_line.equals("")) {
 			return false;
 		}
 		String[] s = initial_line.split(" ");
-		System.out.println("parseInitialLine-->"+initial_line);
-		req.setMethod(s[0]);
-		req.setPath(s[1].substring(0, s[1].indexOf("?") == -1 ? s[1].length()
-				: s[1].indexOf("?")));
-		req.setHttpVersion(s[2]);
+		request.setMethod(s[0]);
+		request.setPath(s[1].substring(0, s[1].indexOf("?") == -1 ? s[1]
+				.length() : s[1].indexOf("?")));
+		request.setHttpVersion(s[2]);
 		// parse the querystring
 		if (s[1].contains("?")) {
 			String[] query = s[1].substring(s[1].indexOf('?') + 1,
@@ -44,9 +32,29 @@ public class RequestParser {
 			for (String _s : query) {
 				String key = _s.split("=")[0];
 				String value = _s.split("=")[1];
-				req.setQueryString(key, value);
+				request.setQueryString(key, value);
 			}
 		}
 		return true;
 	}
+
+	/**
+	 * 解析 header
+	 * 
+	 * @param request
+	 * @param h
+	 * @return
+	 */
+	public static Request parseHeader(Request request, String header_line) {
+		String name = header_line.split(":")[0].trim();
+		String value = header_line.split(":")[1].trim();
+		request.addHeader(name.toLowerCase(), value);
+		return request;
+
+	}
+
+	public static Request parseBody(Request request, String body) {
+		return request;
+	}
+
 }

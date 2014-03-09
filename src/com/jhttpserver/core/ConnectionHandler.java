@@ -56,14 +56,32 @@ public class ConnectionHandler implements Runnable {
 		BufferedReader br = new BufferedReader(new InputStreamReader(connection
 				.getInputStream()));
 		String line = null;
+		int type = 0;
+		request = new Request();
 		while ((line = br.readLine()) != null) {
-			headerString.append(line).append("\n");
-			if (line.trim().equals("")) {
+			if (line.equals(""))
+				type = 2;
+			switch (type) {
+			case 0: // initial line
+				RequestParser.parseInitialLine(request, line);
+				type++;
+				break;
+			case 1: // header
+				RequestParser.parseHeader(request, line);
+				break;
+			case 2: // [blank line here]
+				type++;
+				return;
+			 
+			case 3: // body
+				RequestParser.parseBody(request, line);
+				break;
+			default:
 				break;
 			}
 		}
 		// parse initial line
-		request = RequestParser.parse(headerString.toString().split("\n"));
+		// request = RequestParser.parse(headerString.toString().split("\n"));
 	}
 
 	public void onComplete() {
