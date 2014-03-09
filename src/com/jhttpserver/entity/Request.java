@@ -70,4 +70,11 @@ public class Request {
 		this.body = body;
 	}
 
+	@Override
+	public String toString() {
+		return "Request [body=" + body + ", header=" + header
+				+ ", httpVersion=" + httpVersion + ", method=" + method
+				+ ", path=" + path + ", queryString=" + queryString + "]";
+	}
+
 }

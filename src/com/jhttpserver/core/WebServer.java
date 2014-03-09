@@ -64,4 +64,11 @@ public class WebServer implements IWebServer {
 		handlers.put(url, exe);
 	}
 
+	@Override
+	public void post(String url, Execution exe) {
+		if (handlers == null)
+			handlers = new HashMap<String, Execution>();
+		handlers.put(url, exe);
+	}
+
 }

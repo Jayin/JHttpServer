@@ -1,7 +1,10 @@
 package com.example;
 
 
-import org.apache.commons.io.IOUtils;
+import java.io.File;
+import java.io.IOException;
+
+import org.apache.commons.io.FileUtils;
 
 import com.jhttpserver.core.WebServer;
 import com.jhttpserver.entity.Request;
@@ -12,10 +15,23 @@ public class App {
 	public static void main(String[] args) {
 		WebServer server = new WebServer();
 		
+		server.post("/post", new Execution() {
+			
+			@Override
+			public void onExecute(Request req, Response res) {
+				 res.send(req.toString());
+				
+			}
+		});
 		server.get("/", new Execution() {
 			
 			@Override
 			public void onExecute(Request req, Response res) {
+				try {
+					res.send(FileUtils.readFileToString(new File("./layouts/index.html")));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 				
 			}
 		});
