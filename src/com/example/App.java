@@ -1,5 +1,8 @@
 package com.example;
 
+
+import org.apache.commons.io.IOUtils;
+
 import com.jhttpserver.core.WebServer;
 import com.jhttpserver.entity.Request;
 import com.jhttpserver.entity.Response;
@@ -8,6 +11,14 @@ import com.jhttpserver.interfaces.Execution;
 public class App {
 	public static void main(String[] args) {
 		WebServer server = new WebServer();
+		
+		server.get("/", new Execution() {
+			
+			@Override
+			public void onExecute(Request req, Response res) {
+				
+			}
+		});
 
 		server.get("/hello", new Execution() {
 
