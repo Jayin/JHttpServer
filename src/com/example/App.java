@@ -1,6 +1,5 @@
 package com.example;
 
-
 import java.io.File;
 import java.io.IOException;
 
@@ -14,24 +13,26 @@ import com.jhttpserver.interfaces.Execution;
 public class App {
 	public static void main(String[] args) {
 		WebServer server = new WebServer();
-		
-		server.post("/post", new Execution() {
-			
-			@Override
-			public void onExecute(Request req, Response res) {
-				 res.send(req.toString());
-			}
-		});
+
 		server.get("/", new Execution() {
-			
+
 			@Override
 			public void onExecute(Request req, Response res) {
 				try {
-					res.send(FileUtils.readFileToString(new File("./layouts/index.html")));
+					res.send(FileUtils.readFileToString(new File(
+							"./layouts/index.html")));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				
+
+			}
+		});
+
+		server.post("/post", new Execution() {
+
+			@Override
+			public void onExecute(Request req, Response res) {
+				res.send(req.getBody());
 			}
 		});
 
@@ -50,7 +51,7 @@ public class App {
 				res.send("Do you like JHttpServer?");
 			}
 		});
-		//DefaultPort = 8000
+		// DefaultPort = 8000
 		server.listen(WebServer.DefaultPort);
 	}
 }
