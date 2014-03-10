@@ -2,10 +2,12 @@ package com.jhttpserver.core;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.HashMap;
 
+import com.jhttpserver.entity.Constants;
 import com.jhttpserver.entity.Request;
 import com.jhttpserver.entity.Response;
 import com.jhttpserver.interfaces.Execution;
@@ -53,8 +55,8 @@ public class ConnectionHandler implements Runnable {
 
 	public void onParseBody() throws IOException {
 		StringBuffer headerString = new StringBuffer();
-		BufferedReader br = new BufferedReader(new InputStreamReader(connection
-				.getInputStream()));
+		InputStream in = connection.getInputStream();
+		BufferedReader br = new BufferedReader(new InputStreamReader(in));
 		String line = null;
 		int type = 0;
 		request = new Request();
@@ -71,17 +73,25 @@ public class ConnectionHandler implements Runnable {
 				break;
 			case 2: // [blank line here]
 				type++;
+				// parse body
+				if (request.getMethod().equals(Constants.MEHOD_POST)) {
+					int content_length = Integer.parseInt(request
+							.getHeader("content-length"));
+					char[] chars = new char[1024];
+					int count = 0;
+					String body = "";
+					while (content_length > 0
+							&& (count = br.read(chars, 0, 1024)) != -1) {
+						content_length -= count;
+						body += new String(new String(chars, 0, count));
+					}
+					request.setBody(body);
+				}
 				return;
-			 
-			case 3: // body
-				RequestParser.parseBody(request, line);
-				break;
 			default:
-				break;
+				return;
 			}
 		}
-		// parse initial line
-		// request = RequestParser.parse(headerString.toString().split("\n"));
 	}
 
 	public void onComplete() {

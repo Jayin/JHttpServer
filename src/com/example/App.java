@@ -20,7 +20,6 @@ public class App {
 			@Override
 			public void onExecute(Request req, Response res) {
 				 res.send(req.toString());
-				
 			}
 		});
 		server.get("/", new Execution() {
