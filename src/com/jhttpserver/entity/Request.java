@@ -12,16 +12,26 @@ public class Request {
 	private String httpVersion;
 	private String method;
 	private String path;
-	private HashMap<String, String> queryString;
+	private HashMap<String, String> queryString;//method-get
 	private HashMap<String, String> header;// 请求头
+	private HashMap<String, String> params; //method-post
 	private String body; // body
 
 	public Request() {
 		queryString = new HashMap<String, String>();
 		header = new HashMap<String, String>();
+		params = new HashMap<String, String>();
+	}
+	
+	public void addParams(String name,String value){
+		this.params.put(name, value);
+	}
+	
+	public String getParams(String name){
+		return this.params.get(name);
 	}
 
-	// 有点粗糙,其实value那里还可以细分
+ 
 	public void addHeader(String name, String value) {
 		this.header.put(name, value);
 	}
@@ -74,7 +84,7 @@ public class Request {
 	public String toString() {
 		return "Request [body=" + body + ", header=" + header
 				+ ", httpVersion=" + httpVersion + ", method=" + method
-				+ ", path=" + path + ", queryString=" + queryString + "]";
+				+ ", params=" + params + ", path=" + path + ", queryString="
+				+ queryString + "]";
 	}
-
 }

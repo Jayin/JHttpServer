@@ -32,7 +32,7 @@ public class App {
 
 			@Override
 			public void onExecute(Request req, Response res) {
-				res.send(req.getBody());
+				res.send(req.toString());
 			}
 		});
 

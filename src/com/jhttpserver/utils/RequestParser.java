@@ -1,5 +1,9 @@
 package com.jhttpserver.utils;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+
 import com.jhttpserver.entity.Request;
 
 /**
@@ -50,10 +54,25 @@ public class RequestParser {
 		String value = header_line.split(":")[1].trim();
 		request.addHeader(name.toLowerCase(), value);
 		return request;
-
 	}
-
+   /**
+    * 解析body
+    * @param request
+    * @param body
+    * @return
+    */
 	public static Request parseBody(Request request, String body) {
+		String[] s = body.split("&");
+		for (String _s : s) {
+			String name = _s.split("=")[0];
+			String value = null;
+			try {
+				value = URLDecoder.decode(_s.split("=")[1], "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+			request.addParams(name, value);
+		}
 		return request;
 	}
 

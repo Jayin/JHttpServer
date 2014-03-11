@@ -54,7 +54,6 @@ public class ConnectionHandler implements Runnable {
 	}
 
 	public void onParseBody() throws IOException {
-		StringBuffer headerString = new StringBuffer();
 		InputStream in = connection.getInputStream();
 		BufferedReader br = new BufferedReader(new InputStreamReader(in));
 		String line = null;
@@ -86,6 +85,7 @@ public class ConnectionHandler implements Runnable {
 						body += new String(new String(chars, 0, count));
 					}
 					request.setBody(body);
+					RequestParser.parseBody(request, body);
 				}
 				return;
 			default:
