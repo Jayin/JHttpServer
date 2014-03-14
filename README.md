@@ -1,7 +1,7 @@
 JHttpServer
 ===========
-A simple http server implement in Java
-:
+A simple http server implement in Java  
+
 Example
 ===
 ```java
@@ -13,8 +13,7 @@ Example
 			@Override
 			public void onExecute(Request req, Response res) {
 				try {
-					res.send(FileUtils.readFileToString(new File(
-							"./layouts/index.html")));
+					res.send(new File("./layouts/index.html"));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

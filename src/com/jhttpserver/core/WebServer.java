@@ -28,7 +28,7 @@ public class WebServer implements IWebServer {
 	private int Status_Stop = 1;
 	private int status = -1;
 
-	ThreadPoolExecutor excutor = new ThreadPoolExecutor(2, 5, 2,
+	ThreadPoolExecutor excutor = new ThreadPoolExecutor(4, 5, 2,
 			TimeUnit.MINUTES, new LinkedBlockingQueue<Runnable>(10));
 
 	private void initServer(int port) {
@@ -50,7 +50,9 @@ public class WebServer implements IWebServer {
 		while (true) {
 			try {
 				Socket connection = serverSocket.accept();
-				excutor.submit(new ConnectionHandler(connection, handlers));
+//				excutor.submit();
+//				excutor.execute();
+				new Thread(new ConnectionHandler(connection, handlers)).start();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

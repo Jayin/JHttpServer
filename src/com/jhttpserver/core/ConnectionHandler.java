@@ -35,10 +35,10 @@ public class ConnectionHandler implements Runnable {
 			onParseBody();
 			if (request != null) {
 				exe = handlers.get(request.getPath());
-				if (exe != null) {
-					exe.onExecute(request, response);
-				} else {
+				if(exe ==null){
 					response.send(404, "Not found page");
+				}else{
+					exe.onExecute(request, response);
 				}
 			}
 		} catch (Exception e) {
@@ -50,7 +50,7 @@ public class ConnectionHandler implements Runnable {
 
 	public void onStart() throws IOException {
 		start = System.currentTimeMillis();
-		response = new Response(connection.getOutputStream());
+		response = new Response(connection);
 	}
 
 	public void onParseBody() throws IOException {
@@ -60,10 +60,12 @@ public class ConnectionHandler implements Runnable {
 		int type = 0;
 		request = new Request();
 		while ((line = br.readLine()) != null) {
+			System.out.println("Line--"+line);
 			if (line.equals(""))
 				type = 2;
 			switch (type) {
 			case 0: // initial line
+//				
 				RequestParser.parseInitialLine(request, line);
 				type++;
 				break;
@@ -96,6 +98,7 @@ public class ConnectionHandler implements Runnable {
 
 	public void onComplete() {
 		end = System.currentTimeMillis();
+		System.out.println();
 		System.out.println(request.getMethod() + " " + request.getPath() + " "
 				+ (end - start) + "ms");
 	}

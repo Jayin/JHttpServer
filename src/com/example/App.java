@@ -19,12 +19,10 @@ public class App {
 			@Override
 			public void onExecute(Request req, Response res) {
 				try {
-					res.send(FileUtils.readFileToString(new File(
-							"./layouts/index.html")));
+					res.send(new File("./layouts/index.html"));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-
 			}
 		});
 
