@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.util.HashMap;
 
 import com.jhttpserver.entity.Constants;
@@ -14,6 +16,7 @@ import com.jhttpserver.interfaces.Execution;
 import com.jhttpserver.utils.RequestParser;
 
 public class ConnectionHandler implements Runnable {
+	private int SOCKET_READ_TIMEOUT = 5000;
 	private Socket connection;
 	private long start = 0;
 	private long end = 0;
@@ -23,8 +26,9 @@ public class ConnectionHandler implements Runnable {
 	HashMap<String, Execution> handlers;
 
 	public ConnectionHandler(Socket connection,
-			HashMap<String, Execution> handlers) {
+			HashMap<String, Execution> handlers) throws SocketException {
 		this.connection = connection;
+		this.connection.setSoTimeout(SOCKET_READ_TIMEOUT);
 		this.handlers = handlers;
 	}
 
@@ -35,14 +39,16 @@ public class ConnectionHandler implements Runnable {
 			onParseBody();
 			if (request != null) {
 				exe = handlers.get(request.getPath());
-				if(exe ==null){
+				if (exe == null) {
 					response.send(404, "Not found page");
-				}else{
+				} else {
 					exe.onExecute(request, response);
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			if(e instanceof SocketTimeoutException){
+ 				//System.out.println("request time out");
+			}
 		} finally {
 			onComplete();
 		}
@@ -60,12 +66,11 @@ public class ConnectionHandler implements Runnable {
 		int type = 0;
 		request = new Request();
 		while ((line = br.readLine()) != null) {
-			System.out.println("Line--"+line);
 			if (line.equals(""))
 				type = 2;
 			switch (type) {
 			case 0: // initial line
-//				
+			//					
 				RequestParser.parseInitialLine(request, line);
 				type++;
 				break;
@@ -94,13 +99,16 @@ public class ConnectionHandler implements Runnable {
 				return;
 			}
 		}
+
 	}
 
 	public void onComplete() {
-		end = System.currentTimeMillis();
-		System.out.println();
-		System.out.println(request.getMethod() + " " + request.getPath() + " "
-				+ (end - start) + "ms");
+		if(request.getMethod()!=null && request.getPath()!=null){
+			end = System.currentTimeMillis();
+			System.out.println(request.getMethod() + " " + request.getPath() + " "
+					+ (end - start) + "ms");
+		}
+		
 	}
 
 }

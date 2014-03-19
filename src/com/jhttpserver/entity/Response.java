@@ -28,8 +28,7 @@ public class Response {
 	}
 
 	private void _send(String str) throws IOException {
-		if (!socket.isOutputShutdown()) {
-			System.out.print("_send-->"+str);
+		if (!socket.isOutputShutdown() && !socket.isClosed()) {
 			out.write(str.getBytes());
 		}
 	}
@@ -37,6 +36,7 @@ public class Response {
 	public void send(int statusCode, String content) {
 		try {
 			writeHeader(statusCode);
+			_send("Connection: keep-alive\n");
 			_send("content-type:" + getContentType() + "\n");
 			_send("\n");
 			_send(content);
@@ -46,7 +46,7 @@ public class Response {
 		} finally {
 			if (out != null) {
 				try {
-					out.close();
+					if(!socket.isClosed())out.close();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
