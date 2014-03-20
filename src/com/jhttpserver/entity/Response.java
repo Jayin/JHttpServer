@@ -23,7 +23,6 @@ public class Response{
 	private String contentType;
 
 	public Response(Socket socket) throws IOException {
-		System.out.println("socket:"+socket.toString());
 		this.socket = socket;
 		this.out = socket.getOutputStream();
 	}

@@ -2,7 +2,6 @@ package com.jhttpserver.utils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 
 import com.jhttpserver.entity.Request;
 

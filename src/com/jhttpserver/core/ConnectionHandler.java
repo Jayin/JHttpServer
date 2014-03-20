@@ -7,7 +7,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.SocketException;
-import java.net.SocketTimeoutException;
 import java.util.HashMap;
 
 import com.jhttpserver.entity.Constants;
@@ -103,7 +102,6 @@ public class ConnectionHandler implements Runnable {
 	}
 
 	public void onComplete() {
-		System.out.println("request solved!");
 		if(request.getMethod()!=null && request.getPath()!=null){
 			end = System.currentTimeMillis();
 			System.out.println(request.getMethod() + " " + request.getPath() + " "

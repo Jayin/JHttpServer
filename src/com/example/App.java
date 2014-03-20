@@ -3,8 +3,6 @@ package com.example;
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.commons.io.FileUtils;
-
 import com.jhttpserver.core.WebServer;
 import com.jhttpserver.entity.Request;
 import com.jhttpserver.entity.Response;
