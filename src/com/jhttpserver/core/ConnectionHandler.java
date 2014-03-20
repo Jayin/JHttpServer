@@ -1,6 +1,7 @@
 package com.jhttpserver.core;
 
 import java.io.BufferedReader;
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -20,6 +21,7 @@ public class ConnectionHandler implements Runnable {
 	private Socket connection;
 	private long start = 0;
 	private long end = 0;
+	InputStream in = null;
 	private Request request;
 	private Response response;
 	private Execution exe;
@@ -46,9 +48,7 @@ public class ConnectionHandler implements Runnable {
 				}
 			}
 		} catch (Exception e) {
-			if(e instanceof SocketTimeoutException){
- 				//System.out.println("request time out");
-			}
+			//SocketTimeoutException) 
 		} finally {
 			onComplete();
 		}
@@ -60,7 +60,7 @@ public class ConnectionHandler implements Runnable {
 	}
 
 	public void onParseBody() throws IOException {
-		InputStream in = connection.getInputStream();
+		in = connection.getInputStream();
 		BufferedReader br = new BufferedReader(new InputStreamReader(in));
 		String line = null;
 		int type = 0;
@@ -103,12 +103,36 @@ public class ConnectionHandler implements Runnable {
 	}
 
 	public void onComplete() {
+		System.out.println("request solved!");
 		if(request.getMethod()!=null && request.getPath()!=null){
 			end = System.currentTimeMillis();
 			System.out.println(request.getMethod() + " " + request.getPath() + " "
 					+ (end - start) + "ms");
 		}
-		
+		close(in);
+		close(connection);
 	}
+	
+	private void close(Closeable closeable){
+		if(closeable!=null){
+			try {
+				closeable.close();
+			} catch (IOException e) {
+				System.out.println(this.getClass().getName()+"close error");
+			}
+		}
+	}
+	
+	private void close(Socket socket){
+		if(socket!=null){
+			try {
+				socket.close();
+			} catch (IOException e) {
+				System.out.println(this.getClass().getName()+"close socket error");
+			}
+		}
+	}
+	
+	
 
 }

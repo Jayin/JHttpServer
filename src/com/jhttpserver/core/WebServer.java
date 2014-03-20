@@ -31,23 +31,18 @@ public class WebServer implements IWebServer {
 	ThreadPoolExecutor excutor = new ThreadPoolExecutor(2, 4, 2,
 			TimeUnit.MINUTES, new LinkedBlockingQueue<Runnable>(10));
 
-	private void initServer(int port) {
-		try {
+	private void initServer(int port) throws IOException {
 			serverSocket = new ServerSocket(port);
 			status = Status_Staring;
-
-		} catch (IOException e1) {
-			System.out.println("web server faild!");
-			status = Status_Stop;
-		}
+	 
 	}
 
-	public void listen(int port) {
+	public void listen(int port) throws IOException {
 		initServer(port);
 		if (status == Status_Staring) {
 			System.out.println("web server listened in port:" + port);
 		}
-		while (true) {
+		while (true && status == Status_Staring) {
 			try {
 				Socket connection = serverSocket.accept();
  				excutor.submit(new ConnectionHandler(connection, handlers));

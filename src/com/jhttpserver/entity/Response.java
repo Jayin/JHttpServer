@@ -1,5 +1,6 @@
 package com.jhttpserver.entity;
 
+import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -22,18 +23,18 @@ public class Response {
 	private String contentType;
 
 	public Response(Socket socket) throws IOException {
+		System.out.println("socket:"+socket.toString());
 		this.socket = socket;
 		this.out = socket.getOutputStream();
-
 	}
 
 	private void _send(String str) throws IOException {
-		if (!socket.isOutputShutdown() && !socket.isClosed()) {
+		if (!socket.isClosed()) {
 			out.write(str.getBytes());
 		}
 	}
 
-	public void send(int statusCode, String content) {
+	public void send(int statusCode, String content){
 		try {
 			writeHeader(statusCode);
 			_send("Connection: keep-alive\n");
@@ -44,18 +45,24 @@ public class Response {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
-			if (out != null) {
-				try {
-					if(!socket.isClosed())out.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+			close(out);
+		}
+	}
+	
+	private void close(Closeable closeable){
+		if(closeable!=null){
+			try {
+				closeable.close();
+			} catch (IOException e) {
+				System.out.println("close response exception");
+				e.printStackTrace();
 			}
 		}
 	}
-
-	/** response a string */
-	public void send(String content) {
+	
+	/** response a string 
+	 * @throws IOException */
+	public void send(String content)   {
 		send(200, content);
 	}
 
@@ -67,6 +74,10 @@ public class Response {
 	/** response a file */
 	public void send(File file, String encoding) throws IOException {
 		send(200, FileUtils.readFileToString(file, encoding));
+	}
+	
+	public void redirect(String url){
+		 //重定向
 	}
 
 	public String getContentType() {

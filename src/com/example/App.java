@@ -50,6 +50,10 @@ public class App {
 			}
 		});
 		// DefaultPort = 8000
-		server.listen(WebServer.DefaultPort);
+		try {
+			server.listen(WebServer.DefaultPort);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
