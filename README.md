@@ -44,6 +44,25 @@ Example
 				res.send("Do you like JHttpServer?");
 			}
 		});
+
+			//redirect
+		server.get("/tolike",new Execution() {
+			
+			@Override
+			public void onExecute(Request req, Response res) {
+				 res.redirect("/like");
+				
+			}
+		});		
+		
+		server.get("/baidu", new Execution() {
+			
+			@Override
+			public void onExecute(Request req, Response res) {
+				res.redirect("http://www.baidu.com");
+			}
+		});
+		
 		// DefaultPort = 8000
 		server.listen(WebServer.DefaultPort);
 	}

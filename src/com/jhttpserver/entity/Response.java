@@ -17,7 +17,7 @@ import com.jhttpserver.utils.DefaultConfig;
  * @author Jayin Ton
  * 
  */
-public class Response {
+public class Response{
 	private Socket socket;
 	private OutputStream out = null;
 	private String contentType;
@@ -36,27 +36,15 @@ public class Response {
 
 	public void send(int statusCode, String content){
 		try {
-			writeHeader(statusCode);
-			_send("Connection: keep-alive\n");
-			_send("content-type:" + getContentType() + "\n");
+			writeStatusLine(statusCode);
+			writeHeader("Connection: keep-alive\r\n");
+			writeHeader("content-type:" + getContentType() + "\r\n");
 			_send("\n");
 			_send(content);
 			out.flush();
 		} catch (IOException e) {
-			e.printStackTrace();
 		} finally {
 			close(out);
-		}
-	}
-	
-	private void close(Closeable closeable){
-		if(closeable!=null){
-			try {
-				closeable.close();
-			} catch (IOException e) {
-				System.out.println("close response exception");
-				e.printStackTrace();
-			}
 		}
 	}
 	
@@ -78,6 +66,15 @@ public class Response {
 	
 	public void redirect(String url){
 		 //重定向
+		try {
+			writeStatusLine(302);
+			writeHeader("Connection: keep-alive\r\n");
+			writeHeader("Location: "+url);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}finally{
+			close(out);
+		}
 	}
 
 	public String getContentType() {
@@ -89,10 +86,14 @@ public class Response {
 	}
 
 	/** construct the status line */
-	public void writeHeader(int statusCode) throws IOException {
+	private void writeStatusLine(int statusCode) throws IOException {
 		String statusLine = "HTTP/1.1 " + statusCode + " "
 				+ getResponseCodeDescription(statusCode) + "\n";
 		_send(statusLine);
+	}
+	/** write header */
+	private void writeHeader(String header) throws IOException{
+		_send(header);
 	}
 
 	private static Hashtable<Integer, String> StatusCodes = new Hashtable<Integer, String>();
@@ -110,5 +111,15 @@ public class Response {
 		if (d == null)
 			return "Unknown";
 		return d;
+	}
+	
+	private void close(Closeable closeable){
+		if(closeable!=null){
+			try {
+				closeable.close();
+			} catch (IOException e) {
+				System.out.println("close response exception");
+			}
+		}
 	}
 }

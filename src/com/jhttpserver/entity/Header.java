@@ -3,7 +3,7 @@ package com.jhttpserver.entity;
 import java.util.HashMap;
 /**
  * 请求头
- * @author Lenovo
+ * @author Jayin Ton
  *
  */
 public class Header {
