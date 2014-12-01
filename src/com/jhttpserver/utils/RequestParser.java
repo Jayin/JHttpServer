@@ -40,7 +40,7 @@ public class RequestParser {
 					if(_s.split("=").length>1){
 						value = _s.split("=")[1];
 					}
-					request.setQueryString(key, value);
+					request.addParam(key,value);
 				}
 			}
 		}
@@ -70,14 +70,18 @@ public class RequestParser {
 	public static Request parseBody(Request request, String body) {
 		String[] s = body.split("&");
 		for (String _s : s) {
-			String name = _s.split("=")[0];
-			String value = null;
-			try {
-				value = URLDecoder.decode(_s.split("=")[1], "UTF-8");
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
+			if(_s.indexOf('=') != -1 ){
+				String name = _s.split("=")[0];
+				String value = null;
+				try {
+					value = URLDecoder.decode(_s.split("=")[1], "UTF-8");
+				} catch (UnsupportedEncodingException e) {
+					value = _s.split("=")[1];
+				} catch (IndexOutOfBoundsException e){
+					value = "";
+				}
+				request.addData(name, value);
 			}
-			request.addParam(name, value);
 		}
 		return request;
 	}

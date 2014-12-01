@@ -12,40 +12,42 @@ public class Request {
 	private String httpVersion;
 	private String method;
 	private String path;
-	private HashMap<String, String> queryString;//method-get
 	private HashMap<String, String> header;// 请求头
-	private HashMap<String, String> params; //method-post
+	private HashMap<String, String> data; //method-post
+	private HashMap<String, String> params;//method-get
 	private String body; // body
 
 	public Request() {
-		queryString = new HashMap<String, String>();
 		header = new HashMap<String, String>();
+		data = new HashMap<String, String>();
 		params = new HashMap<String, String>();
 	}
 	
-	public void addParams(String name,String value){
-		this.params.put(name, value);
+	public void addData(String name, String value){
+		this.data.put(name, value);
 	}
 	
-	public String getParams(String name){
+	public String getData(String name){
+		return this.data.get(name);
+	}
+
+    public void addParam(String name,String value){
+		this.params.put(name,value);
+	}
+
+	public String getParam(String name){
 		return this.params.get(name);
 	}
 
- 
+	public HashMap<String, String> getParams(){
+		return this.params;
+	}
 	public void addHeader(String name, String value) {
 		this.header.put(name, value);
 	}
 
 	public String getHeader(String name) {
 		return this.header.get(name);
-	}
-
-	public void setQueryString(String key, String value) {
-		queryString.put(key, value);
-	}
-
-	public String query(String key) {
-		return queryString.get(key);
 	}
 
 	public String getHttpVersion() {
@@ -82,9 +84,14 @@ public class Request {
 
 	@Override
 	public String toString() {
-		return "Request [body=" + body + ", header=" + header
-				+ ", httpVersion=" + httpVersion + ", method=" + method
-				+ ", params=" + params + ", path=" + path + ", queryString="
-				+ queryString + "]";
+		return "Request{" +
+				"httpVersion='" + httpVersion + '\'' +
+				", method='" + method + '\'' +
+				", path='" + path + '\'' +
+				", header=" + header +
+				", data=" + data +
+				", params=" + params +
+				", body='" + body + '\'' +
+				'}';
 	}
 }
