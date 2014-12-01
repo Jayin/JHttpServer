@@ -23,6 +23,7 @@ public class RequestParser {
 		if (initial_line == null || initial_line.equals("")) {
 			return false;
 		}
+
 		String[] s = initial_line.split(" ");
 		request.setMethod(s[0]);
 		request.setPath(s[1].substring(0, s[1].indexOf("?") == -1 ? s[1]
@@ -33,11 +34,17 @@ public class RequestParser {
 			String[] query = s[1].substring(s[1].indexOf('?') + 1,
 					s[1].length()).split("&");
 			for (String _s : query) {
-				String key = _s.split("=")[0];
-				String value = _s.split("=")[1];
-				request.setQueryString(key, value);
+				if(_s.indexOf('=') != -1 ){
+					String key = _s.split("=")[0];
+					String value = "";
+					if(_s.split("=").length>1){
+						value = _s.split("=")[1];
+					}
+					request.setQueryString(key, value);
+				}
 			}
 		}
+
 		return true;
 	}
 
@@ -70,7 +77,7 @@ public class RequestParser {
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
-			request.addParams(name, value);
+			request.addParam(name, value);
 		}
 		return request;
 	}
