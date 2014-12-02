@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.util.HashMap;
 
 import com.jhttpserver.entity.Constants;
@@ -16,7 +17,7 @@ import com.jhttpserver.interfaces.Execution;
 import com.jhttpserver.utils.RequestParser;
 
 public class ConnectionHandler implements Runnable {
-	private int SOCKET_READ_TIMEOUT = 5000;
+	private int SOCKET_READ_TIMEOUT = 15000; //15s
 	private Socket connection;
 	private long start = 0;
 	private long end = 0;
@@ -46,8 +47,10 @@ public class ConnectionHandler implements Runnable {
 					exe.onExecute(request, response);
 				}
 			}
-		} catch (Exception e) {
-			//SocketTimeoutException) 
+		} catch(SocketTimeoutException e){
+			//Read time out on onParseBody()
+		}catch (Exception e) {
+			e.printStackTrace();
 		} finally {
 			onComplete();
 		}
@@ -92,6 +95,8 @@ public class ConnectionHandler implements Runnable {
 					}
 					request.setBody(body);
 					RequestParser.parseBody(request, body);
+					//读完就关闭
+					in.close();
 				}
 				return;
 			default:
@@ -102,12 +107,11 @@ public class ConnectionHandler implements Runnable {
 	}
 
 	public void onComplete() {
-		if(request.getMethod()!=null && request.getPath()!=null){
+		if(request.getMethod() != null && request.getPath() != null){
 			end = System.currentTimeMillis();
 			System.out.println(request.getMethod() + " " + request.getPath() + " "
 					+ (end - start) + "ms");
 		}
-		close(in);
 		close(connection);
 	}
 	
@@ -120,17 +124,4 @@ public class ConnectionHandler implements Runnable {
 			}
 		}
 	}
-	
-	private void close(Socket socket){
-		if(socket!=null){
-			try {
-				socket.close();
-			} catch (IOException e) {
-				System.out.println(this.getClass().getName()+"close socket error");
-			}
-		}
-	}
-	
-	
-
 }
