@@ -8,12 +8,15 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import com.jhttpserver.entity.Constants;
 import com.jhttpserver.entity.Request;
 import com.jhttpserver.entity.Response;
 import com.jhttpserver.interfaces.Execution;
+import com.jhttpserver.interfaces.IMiddleWare;
 import com.jhttpserver.utils.RequestParser;
 
 public class ConnectionHandler implements Runnable {
@@ -21,17 +24,19 @@ public class ConnectionHandler implements Runnable {
 	private Socket connection;
 	private long start = 0;
 	private long end = 0;
-	InputStream in = null;
+	private InputStream in = null;
 	private Request request;
 	private Response response;
 	private Execution exe;
-	HashMap<String, Execution> handlers;
+	private HashMap<String, Execution> handlers;
+	private List<IMiddleWare> middleWares;//middleWares = new ArrayList<IMiddleWare>();
 
 	public ConnectionHandler(Socket connection,
-			HashMap<String, Execution> handlers) throws SocketException {
+			HashMap<String, Execution> handlers, List<IMiddleWare> middleWares) throws SocketException {
 		this.connection = connection;
 		this.connection.setSoTimeout(SOCKET_READ_TIMEOUT);
 		this.handlers = handlers;
+		this.middleWares = middleWares;
 	}
 
 	@Override
@@ -40,6 +45,9 @@ public class ConnectionHandler implements Runnable {
 			onStart();
 			onParseBody();
 			if (request != null) {
+				for(IMiddleWare m : middleWares){
+					m.work(request,response);
+				}
 				exe = handlers.get(request.getPath());
 				if (exe == null) {
 					response.send(404, "Not found page");
