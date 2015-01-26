@@ -35,7 +35,7 @@ public class Response{
 
 	public void send(int statusCode, String content){
 		try {
-			writeStatusLine(statusCode);
+			sendStatusLine(statusCode);
 			_send("Connection: keep-alive\r\n");
 			_send("Content-Type:" + getContentType() + "\r\n");
 			_send("Content-Length: "+content.length()+"\r\n");
@@ -68,9 +68,9 @@ public class Response{
 	public void redirect(String url){
 		 //重定向
 		try {
-			writeStatusLine(302);
-			writeHeader("Connection: keep-alive\r\n");
-			writeHeader("Location: "+url);
+			sendStatusLine(302);
+			_send("Connection: keep-alive\r\n");
+			_send("Location: "+url);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}finally{
@@ -87,14 +87,10 @@ public class Response{
 	}
 
 	/** construct the status line */
-	private void writeStatusLine(int statusCode) throws IOException {
+	private void sendStatusLine(int statusCode) throws IOException {
 		String statusLine = "HTTP/1.1 " + statusCode + " "
 				+ getResponseCodeDescription(statusCode) + "\r\n";
 		_send(statusLine);
-	}
-	/** write header */
-	private void writeHeader(String header) throws IOException{
-		_send(header);
 	}
 
 	private static Hashtable<Integer, String> StatusCodes = new Hashtable<Integer, String>();
