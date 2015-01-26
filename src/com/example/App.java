@@ -42,11 +42,38 @@ public class App {
 
         });
 
-        server.post("/post", new Execution() {
+        server.get("/post", new Execution() {
 
             @Override
             public void onExecute(Request req, Response res) {
-                res.send(req.toString());
+                res.send("get!");
+            }
+        });
+        server.post("/post", new Execution() {
+            @Override
+            public void onExecute(Request req, Response res) {
+                res.send("post!");
+            }
+        });
+
+        server.put("/post", new Execution() {
+            @Override
+            public void onExecute(Request req, Response res) {
+                res.send("put!");
+            }
+        });
+
+        server.patch("/post", new Execution() {
+            @Override
+            public void onExecute(Request req, Response res) {
+                res.send("patch!");
+            }
+        });
+
+        server.delete("/post", new Execution() {
+            @Override
+            public void onExecute(Request req, Response res) {
+                res.send("delete = =,!");
             }
         });
 

@@ -8,14 +8,13 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import com.jhttpserver.entity.Constants;
+import com.jhttpserver.entity.Handler;
 import com.jhttpserver.entity.Request;
 import com.jhttpserver.entity.Response;
-import com.jhttpserver.interfaces.Execution;
 import com.jhttpserver.interfaces.IMiddleWare;
 import com.jhttpserver.utils.RequestParser;
 
@@ -27,12 +26,12 @@ public class ConnectionHandler implements Runnable {
 	private InputStream in = null;
 	private Request request;
 	private Response response;
-	private Execution exe;
-	private HashMap<String, Execution> handlers;
+	private Handler handler;
+	private HashMap<String, Handler> handlers;
 	private List<IMiddleWare> middleWares;//middleWares = new ArrayList<IMiddleWare>();
 
 	public ConnectionHandler(Socket connection,
-			HashMap<String, Execution> handlers, List<IMiddleWare> middleWares) throws SocketException {
+			HashMap<String, Handler> handlers, List<IMiddleWare> middleWares) throws SocketException {
 		this.connection = connection;
 		this.connection.setSoTimeout(SOCKET_READ_TIMEOUT);
 		this.handlers = handlers;
@@ -48,11 +47,11 @@ public class ConnectionHandler implements Runnable {
 				for(IMiddleWare m : middleWares){
 					m.work(request,response);
 				}
-				exe = handlers.get(request.getPath());
-				if (exe == null) {
+				handler = handlers.get(request.getPath());
+				if (handler == null) {
 					response.send(404, "Not found page");
 				} else {
-					exe.onExecute(request, response);
+					handler.onExecute(request, response);
 				}
 			}
 		} catch(SocketTimeoutException e){
@@ -90,7 +89,7 @@ public class ConnectionHandler implements Runnable {
 			case 2: // [blank line here]
 				type++;
 				// parse body
-				if (request.getMethod().equals(Constants.MEHOD_POST)) {
+				if (request.getMethod().equals(Constants.METHOD_POST)) {
 					int content_length = Integer.parseInt(request
 							.getHeader("content-length"));
 					char[] chars = new char[1024];
@@ -103,8 +102,9 @@ public class ConnectionHandler implements Runnable {
 					}
 					request.setBody(body);
 					RequestParser.parseBody(request, body);
-					//读完就关闭
-					in.close();
+					//TODO 如何判断是否读完？ 考虑有这么一个字段：content-length
+					//读完就关闭; 不要这样做，因为会导致整个socket关闭
+					//in.close();
 				}
 				return;
 			default:

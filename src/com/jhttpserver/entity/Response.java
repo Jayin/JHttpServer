@@ -36,12 +36,14 @@ public class Response{
 	public void send(int statusCode, String content){
 		try {
 			writeStatusLine(statusCode);
-			writeHeader("Connection: keep-alive\r\n");
-			writeHeader("content-type:" + getContentType() + "\r\n");
-			_send("\n");
+			_send("Connection: keep-alive\r\n");
+			_send("Content-Type:" + getContentType() + "\r\n");
+			_send("Content-Length: "+content.length()+"\r\n");
+			_send("\r\n");
 			_send(content);
 			out.flush();
 		} catch (IOException e) {
+			e.printStackTrace();
 		} finally {
 			close(out);
 		}
@@ -87,7 +89,7 @@ public class Response{
 	/** construct the status line */
 	private void writeStatusLine(int statusCode) throws IOException {
 		String statusLine = "HTTP/1.1 " + statusCode + " "
-				+ getResponseCodeDescription(statusCode) + "\n";
+				+ getResponseCodeDescription(statusCode) + "\r\n";
 		_send(statusLine);
 	}
 	/** write header */
