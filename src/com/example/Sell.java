@@ -31,7 +31,7 @@ public class Sell{
 
         WebServer app = new WebServer();
 
-        app.get("/buy", new Execution() {
+        app.get("/buy1", new Execution() {
             @Override
             public void onExecute(Request req, Response res) {
                     if(sellSystem.buy()){

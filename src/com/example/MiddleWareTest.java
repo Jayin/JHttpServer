@@ -7,6 +7,7 @@ import com.jhttpserver.interfaces.Execution;
 import com.jhttpserver.interfaces.IMiddleWare;
 
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * Created by jayin on 14/12/5.
@@ -19,14 +20,19 @@ public class MiddleWareTest {
         app.use(new IMiddleWare() {
             @Override
             public void work(Request req, Response res) {
-                System.out.println("1");
+                System.out.println("-- middleware 1 works");
             }
         });
 
         app.use(new IMiddleWare() {
             @Override
             public void work(Request req, Response res) {
-                System.out.println("2");
+                System.out.println("-- middleware 2 works");
+                Map<String,String> headers = req.getHeaders();
+                for(String key:headers.keySet()){
+                    System.out.println(key+" : "+headers.get(key));
+                }
+
             }
         });
 
@@ -34,6 +40,17 @@ public class MiddleWareTest {
             @Override
             public void onExecute(Request req, Response res) {
                 res.send("Finish!");
+            }
+        });
+
+        app.post("/post", new Execution() {
+            @Override
+            public void onExecute(Request req, Response res) {
+                Map<String,String> headers = req.getHeaders();
+                for(String key:headers.keySet()){
+                    System.out.println(key+" : "+headers.get(key));
+                }
+//                res.send("233");
             }
         });
 
