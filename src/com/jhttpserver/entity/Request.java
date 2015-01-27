@@ -1,6 +1,7 @@
 package com.jhttpserver.entity;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Request
@@ -12,13 +13,13 @@ public class Request {
 	private String httpVersion;
 	private String method;
 	private String path;
-	private HashMap<String, String> header;// 请求头
+	private HashMap<String, String> headers;// 请求头
 	private HashMap<String, String> data; //method-post
 	private HashMap<String, String> params;//method-get
 	private String body; // body
 
 	public Request() {
-		header = new HashMap<String, String>();
+		headers = new HashMap<String, String>();
 		data = new HashMap<String, String>();
 		params = new HashMap<String, String>();
 	}
@@ -43,11 +44,15 @@ public class Request {
 		return this.params;
 	}
 	public void addHeader(String name, String value) {
-		this.header.put(name, value);
+		this.headers.put(name, value);
 	}
 
 	public String getHeader(String name) {
-		return this.header.get(name);
+		return this.headers.get(name);
+	}
+
+	public Map<String,String> getHeaders(){
+		return this.headers;
 	}
 
 	public String getHttpVersion() {
@@ -88,7 +93,7 @@ public class Request {
 				"httpVersion='" + httpVersion + '\'' +
 				", method='" + method + '\'' +
 				", path='" + path + '\'' +
-				", header=" + header +
+				", headers=" + headers +
 				", data=" + data +
 				", params=" + params +
 				", body='" + body + '\'' +
