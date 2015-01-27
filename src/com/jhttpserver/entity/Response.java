@@ -43,7 +43,7 @@ public class Response{
 			_send(content);
 			out.flush();
 		} catch (IOException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		} finally {
 			close(out);
 		}
