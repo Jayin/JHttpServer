@@ -48,8 +48,8 @@ public class ConnectionHandler implements Runnable {
 					m.work(request,response);
 				}
 				handler = handlers.get(request.getPath());
-				if (handler == null) {
-					response.send(404, "Not found page");
+				if (handler == null || handler.getExecution(request.getMethod()) == null) {
+					response.send(404, "Cannot {m} {r}".replace("{m}", request.getMethod()).replace("{r}", request.getPath()));
 				} else {
 					handler.onExecute(request, response);
 				}
