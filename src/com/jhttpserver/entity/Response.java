@@ -21,6 +21,7 @@ public class Response{
 	private Socket socket;
 	private OutputStream out = null;
 	private String contentType;
+	private boolean isSend = false;
 
 	public Response(Socket socket) throws IOException {
 		this.socket = socket;
@@ -30,6 +31,8 @@ public class Response{
 	private void _send(String str) throws IOException {
 		if (!socket.isClosed()) {
 			out.write(str.getBytes());
+			out.flush();
+			isSend = true;
 		}
 	}
 
@@ -118,5 +121,12 @@ public class Response{
 				System.out.println("close response exception");
 			}
 		}
+	}
+	/**
+	 * 是否已经发送相应头
+	 * @return true if header had been send.
+	 */
+	public boolean isSend(){
+		return this.isSend;
 	}
 }

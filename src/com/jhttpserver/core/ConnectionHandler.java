@@ -115,6 +115,9 @@ public class ConnectionHandler implements Runnable {
 	}
 
 	public void onComplete() {
+		if(!response.isSend()){
+			response.send("");
+		}
 		if(request.getMethod() != null && request.getPath() != null){
 			end = System.currentTimeMillis();
 			System.out.println(request.getMethod() + " " + request.getPath() + " "
