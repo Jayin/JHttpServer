@@ -55,6 +55,10 @@ public class Response{
 	}
 
 	public void send(int statusCode, String content){
+		if(isSend){
+			return;
+		}
+
 		appendHeader("Connection","keep-alive");
 		if(getContentType() !=null ){
 			appendHeader("Content-Type",getContentType());
@@ -62,6 +66,7 @@ public class Response{
 		if(content != null){
 			appendHeader("Content-Length",content.length()+"");
 		}
+
 		try {
 			sendStatusLine(statusCode);
 			//send headers
