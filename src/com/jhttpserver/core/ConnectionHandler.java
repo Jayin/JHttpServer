@@ -71,7 +71,7 @@ public class ConnectionHandler implements Runnable {
 	public void onParseBody() throws IOException {
 		in = connection.getInputStream();
 		BufferedReader br = new BufferedReader(new InputStreamReader(in));
-		String line = null;
+		String line;
 		int type = 0;
 		request = new Request();
 		while ((line = br.readLine()) != null) {
@@ -79,7 +79,6 @@ public class ConnectionHandler implements Runnable {
 				type = 2;
 			switch (type) {
 			case 0: // initial line
-			//					
 				RequestParser.parseInitialLine(request, line);
 				type++;
 				break;
@@ -98,13 +97,10 @@ public class ConnectionHandler implements Runnable {
 					while (content_length > 0
 							&& (count = br.read(chars, 0, 1024)) != -1) {
 						content_length -= count;
-						body += new String(new String(chars, 0, count));
+						body += new String(chars, 0, count);
 					}
 					request.setBody(body);
 					RequestParser.parseBody(request, body);
-					//TODO 如何判断是否读完？ 考虑有这么一个字段：content-length
-					//读完就关闭; 不要这样做，因为会导致整个socket关闭
-					//in.close();
 				}
 				return;
 			default:
