@@ -5,7 +5,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 
@@ -22,10 +24,26 @@ public class Response{
 	private OutputStream out = null;
 	private String contentType;
 	private boolean isSend = false;
+	private static final String CRLF = "\r\n";
+	private Map<String,String> headers ;
 
 	public Response(Socket socket) throws IOException {
 		this.socket = socket;
 		this.out = socket.getOutputStream();
+		this.headers = new HashMap<String, String>();
+	}
+
+	/**
+	 * 设置响应头
+	 * @param field 头部名
+	 * @param value value为null 则取消其对应的响应头名
+	 */
+	public void appendHeader(String field,String value){
+		if(value == null && headers.get(field) != null){
+			headers.remove(field);
+		}else if(field != null){
+			headers.put(field,value);
+		}
 	}
 
 	private void _send(String str) throws IOException {
@@ -37,13 +55,23 @@ public class Response{
 	}
 
 	public void send(int statusCode, String content){
+		appendHeader("Connection","keep-alive");
+		if(getContentType() !=null ){
+			appendHeader("Content-Type",getContentType());
+		}
+		if(content != null){
+			appendHeader("Content-Length",content.length()+"");
+		}
 		try {
 			sendStatusLine(statusCode);
-			_send("Connection: keep-alive\r\n");
-			_send("Content-Type:" + getContentType() + "\r\n");
-			_send("Content-Length: "+content.length()+"\r\n");
-			_send("\r\n");
-			_send(content);
+			//send headers
+			for(String field:this.headers.keySet()){
+				_send(field + ":" + headers.get(field)+CRLF);
+			}
+			if(content != null){
+				_send(CRLF);
+				_send(content);
+			}
 			out.flush();
 		} catch (IOException e) {
 			//e.printStackTrace();
@@ -70,15 +98,8 @@ public class Response{
 	
 	public void redirect(String url){
 		 //重定向
-		try {
-			sendStatusLine(302);
-			_send("Connection: keep-alive\r\n");
-			_send("Location: "+url);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}finally{
-			close(out);
-		}
+		appendHeader("Location",url);
+		send(302,null);
 	}
 
 	public String getContentType() {

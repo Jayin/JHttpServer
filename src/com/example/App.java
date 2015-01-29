@@ -122,6 +122,14 @@ public class App {
 			}
 		});
 
+        server.get("/header", new Execution() {
+            @Override
+            public void onExecute(Request req, Response res) {
+                res.appendHeader("language","Java");
+                res.send("finish!");
+            }
+        });
+
         // DefaultPort = 8000
         try {
             server.listen(WebServer.DefaultPort);
