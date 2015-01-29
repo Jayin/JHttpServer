@@ -112,6 +112,15 @@ public class App {
                 res.redirect("http://www.baidu.com");
             }
         });
+        
+        //test bug #7:https://github.com/Jayin/JHttpServer/issues/7
+        server.get("/bug7",new Execution() {
+			
+			@Override 
+			public void onExecute(Request req, Response res) {
+				System.out.println("Nothing return! send '' by defult!");
+			}
+		});
 
         // DefaultPort = 8000
         try {

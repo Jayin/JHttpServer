@@ -18,6 +18,14 @@ public class Handler {
 
     }
     /**
+     * 获得对应处理器
+     * @param request_method
+     * @return
+     */
+    public Execution getExecution(String request_method){
+    	return this.exes.get(request_method.toUpperCase());
+    }
+    /**
      * 注册对应的处理器
      * @param method
      * @param exe
@@ -32,8 +40,8 @@ public class Handler {
      * @param response
      */
     public void onExecute(Request request, Response response) {
-       if(exes.get(request.getMethod().toUpperCase()) != null){
-           exes.get(request.getMethod().toUpperCase()).onExecute(request,response);
+       if(getExecution(request.getMethod()) != null){
+    	   getExecution(request.getMethod()).onExecute(request,response);
        }else{
            //TODO 默认一个GET?
            //TODO 跑出一个异常 or 500？
