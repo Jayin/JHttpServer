@@ -1,7 +1,8 @@
 package com.jhttpserver.entity;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 /**
  * Request
@@ -13,13 +14,13 @@ public class Request {
 	private String httpVersion;
 	private String method;
 	private String path;
-	private HashMap<String, String> headers;// 请求头
+	private List<Header> headers;// 请求头
 	private HashMap<String, String> data; //method-post
 	private HashMap<String, String> params;//method-get
 	private String body; // body
 
 	public Request() {
-		headers = new HashMap<String, String>();
+		headers = new ArrayList<Header>();
 		data = new HashMap<String, String>();
 		params = new HashMap<String, String>();
 	}
@@ -44,14 +45,19 @@ public class Request {
 		return this.params;
 	}
 	public void addHeader(String name, String value) {
-		this.headers.put(name, value);
+		this.headers.add(new Header(name,value));
 	}
 
-	public String getHeader(String name) {
-		return this.headers.get(name);
+	public Header getHeader(String field) {
+		field = field.toLowerCase();
+		for(Header h : headers){
+			if(h.getField().equals(field))
+				return h;
+		}
+		return null;
 	}
 
-	public Map<String,String> getHeaders(){
+	public List<Header> getHeaders(){
 		return this.headers;
 	}
 

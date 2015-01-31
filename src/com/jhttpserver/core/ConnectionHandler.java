@@ -90,7 +90,7 @@ public class ConnectionHandler implements Runnable {
 				// parse body
 				if (request.getMethod().equals(Constants.METHOD_POST)) {
 					int content_length = Integer.parseInt(request
-							.getHeader("content-length"));
+							.getHeader("Content-Length").getValue());
 					char[] chars = new char[1024];
 					int count = 0;
 					String body = "";

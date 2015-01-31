@@ -1,12 +1,14 @@
 package com.example;
 
 import com.jhttpserver.core.WebServer;
+import com.jhttpserver.entity.Header;
 import com.jhttpserver.entity.Request;
 import com.jhttpserver.entity.Response;
 import com.jhttpserver.interfaces.Execution;
 import com.jhttpserver.interfaces.IMiddleWare;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,9 +30,9 @@ public class MiddleWareTest {
             @Override
             public void work(Request req, Response res) {
                 System.out.println("-- middleware 2 works");
-                Map<String,String> headers = req.getHeaders();
-                for(String key:headers.keySet()){
-                    System.out.println(key+" : "+headers.get(key));
+                List<Header> headers = req.getHeaders();
+                for(Header h : headers){
+                    System.out.println(h.toString());
                 }
 
             }
@@ -46,9 +48,9 @@ public class MiddleWareTest {
         app.post("/post", new Execution() {
             @Override
             public void onExecute(Request req, Response res) {
-                Map<String,String> headers = req.getHeaders();
-                for(String key:headers.keySet()){
-                    System.out.println(key+" : "+headers.get(key));
+                List<Header> headers = req.getHeaders();
+                for(Header h : headers){
+                    System.out.println(h.toString());
                 }
 //                res.send("233");
             }

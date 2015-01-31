@@ -5,9 +5,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.Map;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
@@ -25,25 +25,20 @@ public class Response{
 	private String contentType;
 	private boolean isSend = false;
 	private static final String CRLF = "\r\n";
-	private Map<String,String> headers ;
-
+	private List<Header> headers;
 	public Response(Socket socket) throws IOException {
 		this.socket = socket;
 		this.out = socket.getOutputStream();
-		this.headers = new HashMap<String, String>();
+		this.headers = new ArrayList<Header>();
 	}
 
 	/**
 	 * 设置响应头
 	 * @param field 头部名
-	 * @param value value为null 则取消其对应的响应头名
+	 * @param value 值
 	 */
 	public void appendHeader(String field,String value){
-		if(value == null && headers.get(field) != null){
-			headers.remove(field);
-		}else if(field != null){
-			headers.put(field,value);
-		}
+		this.headers.add(new Header(field, value));
 	}
 
 	private void _send(String str) throws IOException {
@@ -70,8 +65,8 @@ public class Response{
 		try {
 			sendStatusLine(statusCode);
 			//send headers
-			for(String field:this.headers.keySet()){
-				_send(field + ":" + headers.get(field)+CRLF);
+			for(Header h:this.headers){
+				_send(h.toString() + CRLF);
 			}
 			if(content != null){
 				_send(CRLF);

@@ -126,6 +126,7 @@ public class App {
             @Override
             public void onExecute(Request req, Response res) {
                 res.appendHeader("language","Java");
+                res.appendHeader("language","Python");
                 res.send("finish!");
             }
         });
