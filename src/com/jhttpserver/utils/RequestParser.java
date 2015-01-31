@@ -2,7 +2,10 @@ package com.jhttpserver.utils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.jhttpserver.entity.Cookie;
 import com.jhttpserver.entity.Request;
 
 /**
@@ -59,7 +62,27 @@ public class RequestParser {
 		String name = header_line.split(":")[0].trim();
 		String value = header_line.split(":")[1].trim();
 		request.addHeader(name.toLowerCase(), value);
+
+		if(name.toLowerCase().equals("cookie")){
+			request.setCookies(pareseCookie(value));
+		}
 		return request;
+	}
+
+	/**
+	 * 解释Cookie相应头
+	 * e.g: test=1; fav=py
+	 * @param value
+	 * @return
+	 */
+	public static List<Cookie> pareseCookie(String value){
+		List<Cookie> cookies = new ArrayList<Cookie>();
+		String[] values = value.split(" ");
+		for(String v:values){
+			v = v.replace(";","");
+			cookies.add(new Cookie(v.split("=")[0],v.split("=")[1]));
+		}
+		return cookies;
 	}
    /**
     * 解析body

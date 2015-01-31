@@ -17,12 +17,32 @@ public class Request {
 	private List<Header> headers;// 请求头
 	private HashMap<String, String> data; //method-post
 	private HashMap<String, String> params;//method-get
+	private List<Cookie> cookies;
 	private String body; // body
 
 	public Request() {
 		headers = new ArrayList<Header>();
 		data = new HashMap<String, String>();
 		params = new HashMap<String, String>();
+		cookies = new ArrayList<Cookie>();
+	}
+
+	public List<Cookie> getCookies(){
+		return this.cookies;
+	}
+
+	public Cookie getCookie(String field){
+		for(Cookie c : this.cookies){
+			if(c.getField().equals(field)){
+				return c;
+			}
+		}
+		return null;
+	}
+
+	public void setCookies(List<Cookie> cookies){
+		this.cookies.clear();
+		this.cookies.addAll(cookies);
 	}
 	
 	public void addData(String name, String value){
@@ -45,7 +65,7 @@ public class Request {
 		return this.params;
 	}
 	public void addHeader(String name, String value) {
-		this.headers.add(new Header(name,value));
+		this.headers.add(new Header(name, value));
 	}
 
 	public Header getHeader(String field) {

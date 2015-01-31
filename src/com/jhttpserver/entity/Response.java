@@ -102,6 +102,18 @@ public class Response{
 		send(302,null);
 	}
 
+	public void setCookie(String field,String value){
+	 	this.setCookie(field,value,0);
+	}
+
+	public void setCookie(String field,String value,long maxAge){
+		this.headers.add(new Cookie(field,value,maxAge).toHeader());
+	}
+
+	public void removeCookie(String field){
+		this.headers.add(new Cookie(field,"",-1).toHeader());
+	}
+
 	public String getContentType() {
 		return contentType == null ? "text/html" : contentType;
 	}
