@@ -8,10 +8,15 @@ public class Header {
     private String field;
     private String value;
 
-    public Header(String field,String value){
+
+    public Header(String field,String value,String... values ){
+        if(values.length > 0){
+            for(String v : values) value += "; " + v;
+        }
         this.field = field;
         this.value = value;
     }
+
 
     public String getValue() {
         return value;
