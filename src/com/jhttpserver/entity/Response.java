@@ -37,8 +37,12 @@ public class Response{
 	 * @param field 头部名
 	 * @param value 值
 	 */
-	public void appendHeader(String field,String value){
-		this.headers.add(new Header(field, value));
+	public void appendHeader(String field,String value,String... values){
+		this.headers.add(new Header(field, value,values));
+	}
+
+	public void appendHeader(Header header){
+		this.headers.add(header);
 	}
 
 	private void _send(String str) throws IOException {
@@ -55,9 +59,7 @@ public class Response{
 		}
 
 		appendHeader("Connection","keep-alive");
-		if(getContentType() !=null ){
-			appendHeader("Content-Type",getContentType());
-		}
+		appendHeader("Content-Type",getContentType()+"; charset=utf-8");
 		if(content != null){
 			appendHeader("Content-Length",content.length()+"");
 		}
