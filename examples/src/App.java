@@ -1,5 +1,3 @@
-package com.example;
-
 import com.jhttpserver.core.WebServer;
 import com.jhttpserver.entity.Request;
 import com.jhttpserver.entity.Response;
@@ -19,7 +17,7 @@ public class App {
             @Override
             public void onExecute(Request req, Response res) {
                 try {
-                    res.send(new File("./layouts/index.html"));
+                    res.send(new File(System.getProperty("user.dir") +  File.separator +  "examples/layouts/index.html"));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -30,10 +28,10 @@ public class App {
             @Override
             public void onExecute(Request req, Response res) {
 //                res.send(req.get);
-                HashMap<String,String> params = req.getParams();
+                HashMap<String, String> params = req.getParams();
                 Set<String> keys = params.keySet();
                 String result = "";
-                for(String key : keys){
+                for (String key : keys) {
                     result += key + " : " + params.get(key) + " <br> ";
                 }
                 res.send(result);
@@ -112,21 +110,21 @@ public class App {
                 res.redirect("http://www.baidu.com");
             }
         });
-        
+
         //test bug #7:https://github.com/Jayin/JHttpServer/issues/7
-        server.get("/bug7",new Execution() {
-			
-			@Override 
-			public void onExecute(Request req, Response res) {
-				System.out.println("Nothing return! send '' by defult!");
-			}
-		});
+        server.get("/bug7", new Execution() {
+
+            @Override
+            public void onExecute(Request req, Response res) {
+                System.out.println("Nothing return! send '' by defult!");
+            }
+        });
 
         server.get("/header", new Execution() {
             @Override
             public void onExecute(Request req, Response res) {
-                res.appendHeader("language","Java","Csharp");
-                res.appendHeader("language","Python");
+                res.appendHeader("language", "Java", "Csharp");
+                res.appendHeader("language", "Python");
                 res.send("finish!");
             }
         });

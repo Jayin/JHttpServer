@@ -57,7 +57,7 @@ public class ConnectionHandler implements Runnable {
 		} catch(SocketTimeoutException e){
 			//Read time out on onParseBody()
 		}catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		} finally {
 			onComplete();
 		}

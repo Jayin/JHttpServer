@@ -1,5 +1,3 @@
-package com.example;
-
 import com.jhttpserver.core.WebServer;
 import com.jhttpserver.entity.Cookie;
 import com.jhttpserver.entity.Request;
