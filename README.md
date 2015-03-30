@@ -1,14 +1,24 @@
 JHttpServer
-===========
-A simple http server implement in Java  
+-------
+
+A simple http server implement in Java, with high-level api.
+
+Feature
+-------
+
+* suport `GET` `POST` `PUT` `PATCH` `DELETE`
+* suport cookie
+* support middleware
 
 Example
-===
+-------
+
 ```java
 
        WebServer server = new WebServer();
 
-		server.get("/", new Execution() {
+		// regitster a  GET router
+ 		server.get("/", new Execution() {
 
 			@Override
 			public void onExecute(Request req, Response res) {
@@ -21,49 +31,29 @@ Example
 			}
 		});
 
-		server.post("/post", new Execution() {
+		// regitster a POST router
+		server.post("/login", new Execution() {
 
 			@Override
 			public void onExecute(Request req, Response res) {
-				res.send(req.getBody());
+			  res.setCookie("username","Jayin");
+               res.setCookie("test","1",0);
+				res.send("login ok!");
 			}
 		});
 
-		server.get("/hello", new Execution() {
 
-			@Override
-			public void onExecute(Request req, Response res) {
-				res.send("hello JHttpServer");
-			}
-		});
-
-		server.get("/like", new Execution() {
-
-			@Override
-			public void onExecute(Request req, Response res) {
-				res.send("Do you like JHttpServer?");
-			}
-		});
-
-			//redirect
+		//redirect
 		server.get("/tolike",new Execution() {
 			
 			@Override
 			public void onExecute(Request req, Response res) {
-				 res.redirect("/like");
+				 res.redirect("/");
 				
 			}
 		});		
-		
-		server.get("/baidu", new Execution() {
-			
-			@Override
-			public void onExecute(Request req, Response res) {
-				res.redirect("http://www.baidu.com");
-			}
-		});
-		
-		// DefaultPort = 8000
+
+		// start the server
 		server.listen(WebServer.DefaultPort);
 	}
 ```
@@ -74,5 +64,6 @@ visit `localhost:8000/hello`
 or `localhost:8000/like`  
 
 License
-===
+-------
+
 MIT
