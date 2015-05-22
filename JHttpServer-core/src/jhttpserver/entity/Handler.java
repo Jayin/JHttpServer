@@ -1,6 +1,6 @@
-package com.jhttpserver.entity;
+package jhttpserver.entity;
 
-import com.jhttpserver.interfaces.Execution;
+import jhttpserver.interfaces.Execution;
 
 import java.util.HashMap;
 import java.util.Map;

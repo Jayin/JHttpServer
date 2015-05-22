@@ -1,4 +1,4 @@
-package com.jhttpserver.entity;
+package jhttpserver.entity;
 
 import java.io.Closeable;
 import java.io.File;
@@ -11,7 +11,7 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
-import com.jhttpserver.utils.DefaultConfig;
+import jhttpserver.utils.DefaultConfig;
 
 /**
  * 响应

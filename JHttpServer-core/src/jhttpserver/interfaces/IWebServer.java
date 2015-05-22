@@ -1,4 +1,4 @@
-package com.jhttpserver.interfaces;
+package jhttpserver.interfaces;
 
 
 public interface IWebServer {

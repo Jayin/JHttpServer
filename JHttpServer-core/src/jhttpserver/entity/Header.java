@@ -1,4 +1,4 @@
-package com.jhttpserver.entity;
+package jhttpserver.entity;
 
 /**
  * Created by jayin on 15/1/31.

@@ -1,13 +1,12 @@
-import com.jhttpserver.core.WebServer;
-import com.jhttpserver.entity.Header;
-import com.jhttpserver.entity.Request;
-import com.jhttpserver.entity.Response;
-import com.jhttpserver.interfaces.Execution;
-import com.jhttpserver.interfaces.IMiddleWare;
+import jhttpserver.core.WebServer;
+import jhttpserver.entity.Header;
+import jhttpserver.entity.Request;
+import jhttpserver.entity.Response;
+import jhttpserver.interfaces.Execution;
+import jhttpserver.interfaces.IMiddleWare;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by jayin on 14/12/5.

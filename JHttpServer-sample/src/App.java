@@ -1,7 +1,7 @@
-import com.jhttpserver.core.WebServer;
-import com.jhttpserver.entity.Request;
-import com.jhttpserver.entity.Response;
-import com.jhttpserver.interfaces.Execution;
+import jhttpserver.core.WebServer;
+import jhttpserver.entity.Request;
+import jhttpserver.entity.Response;
+import jhttpserver.interfaces.Execution;
 
 import java.io.File;
 import java.io.IOException;

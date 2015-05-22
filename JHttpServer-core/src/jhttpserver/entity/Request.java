@@ -1,4 +1,4 @@
-package com.jhttpserver.entity;
+package jhttpserver.entity;
 
 import java.util.ArrayList;
 import java.util.HashMap;

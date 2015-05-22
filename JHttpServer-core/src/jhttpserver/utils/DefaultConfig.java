@@ -1,4 +1,4 @@
-package com.jhttpserver.utils;
+package jhttpserver.utils;
 /**
  * 默认参数
  * @author Jayin Ton

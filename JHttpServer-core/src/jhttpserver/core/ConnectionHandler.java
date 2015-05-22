@@ -1,4 +1,4 @@
-package com.jhttpserver.core;
+package jhttpserver.core;
 
 import java.io.BufferedReader;
 import java.io.Closeable;
@@ -11,12 +11,12 @@ import java.net.SocketTimeoutException;
 import java.util.HashMap;
 import java.util.List;
 
-import com.jhttpserver.entity.Constants;
-import com.jhttpserver.entity.Handler;
-import com.jhttpserver.entity.Request;
-import com.jhttpserver.entity.Response;
-import com.jhttpserver.interfaces.IMiddleWare;
-import com.jhttpserver.utils.RequestParser;
+import jhttpserver.entity.Constants;
+import jhttpserver.entity.Handler;
+import jhttpserver.entity.Request;
+import jhttpserver.entity.Response;
+import jhttpserver.interfaces.IMiddleWare;
+import jhttpserver.utils.RequestParser;
 
 public class ConnectionHandler implements Runnable {
 	private int SOCKET_READ_TIMEOUT = 15000; //15s

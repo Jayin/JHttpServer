@@ -1,7 +1,7 @@
-package com.jhttpserver.interfaces;
+package jhttpserver.interfaces;
 
-import com.jhttpserver.entity.Request;
-import com.jhttpserver.entity.Response;
+import jhttpserver.entity.Request;
+import jhttpserver.entity.Response;
 
 /**
  * Created by jayin on 14/12/5.

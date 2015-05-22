@@ -1,4 +1,4 @@
-package com.jhttpserver.entity;
+package jhttpserver.entity;
 /**
  * constans 
  * @author Jayin Ton

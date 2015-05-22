@@ -1,10 +1,10 @@
-package com.jhttpserver.core;
+package jhttpserver.core;
 
-import com.jhttpserver.entity.Constants;
-import com.jhttpserver.entity.Handler;
-import com.jhttpserver.interfaces.Execution;
-import com.jhttpserver.interfaces.IMiddleWare;
-import com.jhttpserver.interfaces.IWebServer;
+import jhttpserver.entity.Constants;
+import jhttpserver.entity.Handler;
+import jhttpserver.interfaces.Execution;
+import jhttpserver.interfaces.IMiddleWare;
+import jhttpserver.interfaces.IWebServer;
 
 import java.io.IOException;
 import java.net.ServerSocket;

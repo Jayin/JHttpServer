@@ -1,12 +1,12 @@
-package com.jhttpserver.utils;
+package jhttpserver.utils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.jhttpserver.entity.Cookie;
-import com.jhttpserver.entity.Request;
+import jhttpserver.entity.Cookie;
+import jhttpserver.entity.Request;
 
 /**
  * 请求解析
