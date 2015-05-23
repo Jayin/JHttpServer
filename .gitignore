@@ -10,3 +10,5 @@
 .classpath
 
 ./.idea
+
+target/
