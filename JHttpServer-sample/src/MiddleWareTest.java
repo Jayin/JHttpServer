@@ -18,20 +18,21 @@ public class MiddleWareTest {
         WebServer app = new WebServer();
         app.use(new IMiddleWare() {
             @Override
-            public void work(Request req, Response res) {
+            public boolean onWork(Request req, Response res) {
                 System.out.println("-- middleware 1 works");
+                return true;
             }
         });
 
         app.use(new IMiddleWare() {
             @Override
-            public void work(Request req, Response res) {
+            public boolean onWork(Request req, Response res) {
                 System.out.println("-- middleware 2 works");
                 List<Header> headers = req.getHeaders();
                 for(Header h : headers){
                     System.out.println(h.toString());
                 }
-
+                return true;
             }
         });
 
