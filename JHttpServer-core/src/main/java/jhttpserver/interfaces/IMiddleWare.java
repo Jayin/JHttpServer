@@ -8,5 +8,5 @@ import jhttpserver.entity.Response;
  */
 public interface IMiddleWare {
 
-    public void work(Request req,Response res);
+    public boolean onWork(Request req, Response res);
 }

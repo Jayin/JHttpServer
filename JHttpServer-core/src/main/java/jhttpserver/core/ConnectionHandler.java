@@ -50,7 +50,9 @@ public class ConnectionHandler implements Runnable {
 					response.appendHeader("Access-Control-Allow-Origin", "*");
 				}
 				for(IMiddleWare m : middleWares){
-					m.work(request,response);
+					if(!m.onWork(request, response)){
+						return;
+					}
 				}
 				handler = handlers.get(request.getPath());
 				if (handler == null || handler.getExecution(request.getMethod()) == null) {
@@ -62,7 +64,7 @@ public class ConnectionHandler implements Runnable {
 		} catch(SocketTimeoutException e){
 			//Read time out on onParseBody()
 		}catch (Exception e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 		} finally {
 			onComplete();
 		}
