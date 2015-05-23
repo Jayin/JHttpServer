@@ -30,12 +30,14 @@ public class ConnectionHandler implements Runnable {
 	private HashMap<String, Handler> handlers;
 	private List<IMiddleWare> middleWares;//middleWares = new ArrayList<IMiddleWare>();
 
-	public ConnectionHandler(Socket connection,
-			HashMap<String, Handler> handlers, List<IMiddleWare> middleWares) throws SocketException {
+	private WebServer app;
+
+	public ConnectionHandler(Socket connection, WebServer app) throws SocketException {
+		this.app = app;
 		this.connection = connection;
 		this.connection.setSoTimeout(SOCKET_READ_TIMEOUT);
-		this.handlers = handlers;
-		this.middleWares = middleWares;
+		this.handlers = app.getHandlers();
+		this.middleWares = app.getMiddleWares();
 	}
 
 	@Override
@@ -44,6 +46,9 @@ public class ConnectionHandler implements Runnable {
 			onStart();
 			onParseBody();
 			if (request != null) {
+				if (app.getServerConfig().cors){
+					response.appendHeader("Access-Control-Allow-Origin", "*");
+				}
 				for(IMiddleWare m : middleWares){
 					m.work(request,response);
 				}

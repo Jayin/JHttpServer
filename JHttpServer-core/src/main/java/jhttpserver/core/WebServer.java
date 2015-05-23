@@ -82,7 +82,7 @@ public class WebServer implements IWebServer {
         while (true && status == Status_Staring) {
             try {
                 Socket connection = serverSocket.accept();
-                excutor.submit(new ConnectionHandler(connection, handlers, middleWares));
+                excutor.submit(new ConnectionHandler(connection, this));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -131,4 +131,15 @@ public class WebServer implements IWebServer {
         registerHandler(Constants.METHOD_DELETE, router, exe);
     }
 
+    public List<IMiddleWare> getMiddleWares() {
+        return middleWares;
+    }
+
+    public HashMap<String, Handler> getHandlers() {
+        return handlers;
+    }
+
+    public ServerConfig getServerConfig() {
+        return serverConfig;
+    }
 }

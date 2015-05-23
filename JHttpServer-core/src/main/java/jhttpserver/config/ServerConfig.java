@@ -14,6 +14,7 @@ public class ServerConfig {
 
     public int port;
     public String root;
+    public boolean cors;
 
     public static ServerConfig getInstance(){
         String config_file = PathUtil.getUserDir() + "/JHttpServer-core/config/server.config.json";
@@ -31,6 +32,7 @@ public class ServerConfig {
         return "ServerConfig{" +
                 "port=" + port +
                 ", root='" + root + '\'' +
+                ", cors=" + cors +
                 '}';
     }
 

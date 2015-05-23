@@ -9,6 +9,7 @@ Feature
 * suport `GET` `POST` `PUT` `PATCH` `DELETE`
 * suport cookie
 * support middleware
+* support CORS config
 
 Example
 -------
