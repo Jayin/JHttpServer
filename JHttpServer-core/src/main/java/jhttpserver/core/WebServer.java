@@ -1,5 +1,6 @@
 package jhttpserver.core;
 
+import jhttpserver.config.ServerConfig;
 import jhttpserver.entity.Constants;
 import jhttpserver.entity.Handler;
 import jhttpserver.interfaces.Execution;
@@ -42,12 +43,16 @@ public class WebServer implements IWebServer {
     private int Status_Stop = 1;
     private int status = -1;
 
+    private ServerConfig serverConfig;
+
     ThreadPoolExecutor excutor = new ThreadPoolExecutor(2, 4, 2,
             TimeUnit.MINUTES, new LinkedBlockingQueue<Runnable>(10));
 
     public WebServer() {
         handlers = new HashMap<String, Handler>();
         middleWares = new ArrayList<IMiddleWare>();
+
+        serverConfig = ServerConfig.getInstance();
     }
 
     private void initServer(int port) throws IOException {
@@ -56,6 +61,19 @@ public class WebServer implements IWebServer {
 
     }
 
+    /**
+     * listen the default port
+     * @throws IOException
+     */
+    public void listen() throws IOException {
+        this.listen(serverConfig.port);
+    }
+
+    /**
+     * list the given port
+     * @param port
+     * @throws IOException
+     */
     public void listen(int port) throws IOException {
         initServer(port);
         if (status == Status_Staring) {
