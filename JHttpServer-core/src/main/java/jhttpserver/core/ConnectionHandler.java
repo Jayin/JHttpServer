@@ -1,16 +1,13 @@
 package jhttpserver.core;
 
-import java.io.BufferedReader;
-import java.io.Closeable;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.HashMap;
 import java.util.List;
 
+import jhttpserver.config.ServerConfig;
 import jhttpserver.entity.Constants;
 import jhttpserver.entity.Handler;
 import jhttpserver.entity.Request;
@@ -56,7 +53,13 @@ public class ConnectionHandler implements Runnable {
 				}
 				handler = handlers.get(request.getPath());
 				if (handler == null || handler.getExecution(request.getMethod()) == null) {
-					response.send(404, "Cannot {m} {r}".replace("{m}", request.getMethod()).replace("{r}", request.getPath()));
+					//check for the static file
+					File tmpFile = new File(this.app.getServerConfig().root + File.separator + request.getPath());
+					if(tmpFile.exists()){
+						response.send(tmpFile);
+					}else{
+						response.send(404, "Cannot {m} {r}".replace("{m}", request.getMethod()).replace("{r}", request.getPath()));
+					}
 				} else {
 					handler.onExecute(request, response);
 				}

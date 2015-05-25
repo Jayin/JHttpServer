@@ -1,5 +1,5 @@
 {
   "port" : 8000,
-  "root" : "${MODULE}/webapp/www",
+  "root" : "/var/www",
   "cors" : true
 }

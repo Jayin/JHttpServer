@@ -2,6 +2,7 @@ import jhttpserver.core.WebServer;
 import jhttpserver.entity.Request;
 import jhttpserver.entity.Response;
 import jhttpserver.interfaces.Execution;
+import jhttpserver.utils.PathUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,6 +12,8 @@ import java.util.Set;
 public class App {
     public static void main(String[] args) {
         WebServer server = new WebServer();
+
+        server.getServerConfig().root = PathUtil.getUserDir() + "/webapp/www";
 
         server.get("/", new Execution() {
 
