@@ -1,5 +1,8 @@
 {
   "port" : 8000,
   "root" : "/var/www",
-  "cors" : true
+  "cors" : true,
+  "DirectoryIndex": [
+    "index.html", "index.php", "index.py"
+  ]
 }

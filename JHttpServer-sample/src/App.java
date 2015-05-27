@@ -14,18 +14,18 @@ public class App {
         WebServer server = new WebServer();
 
         server.getServerConfig().root = PathUtil.getUserDir() + "/webapp/www";
-
-        server.get("/", new Execution() {
-
-            @Override
-            public void onExecute(Request req, Response res) {
-                try {
-                    res.send(new File(System.getProperty("user.dir") +  File.separator +  "examples/layouts/index.html"));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        //注释这个, 为了测试DirectoryIndex https://github.com/Jayin/JHttpServer/issues/15
+//        server.get("/", new Execution() {
+//
+//            @Override
+//            public void onExecute(Request req, Response res) {
+//                try {
+//                    res.send(new File(System.getProperty("user.dir") +  File.separator +  "examples/layouts/index.html"));
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
 
         server.get("/get", new Execution() {
             @Override

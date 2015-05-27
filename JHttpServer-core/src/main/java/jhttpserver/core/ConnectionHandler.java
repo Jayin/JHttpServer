@@ -55,10 +55,27 @@ public class ConnectionHandler implements Runnable {
 				if (handler == null || handler.getExecution(request.getMethod()) == null) {
 					//check for the static file
 					File tmpFile = new File(this.app.getServerConfig().root + File.separator + request.getPath());
-					if(tmpFile.exists()){
+					//check for static file
+					if(tmpFile.exists() && tmpFile.isFile()){
 						response.send(tmpFile);
 					}else{
-						response.send(404, "Cannot {m} {r}".replace("{m}", request.getMethod()).replace("{r}", request.getPath()));
+						//directory index append index.html/index.php/etc
+						//ref: https://github.com/Jayin/JHttpServer/issues/15
+						if(tmpFile.isDirectory()){
+							for(String dir_index : this.app.getServerConfig().DirectoryIndex){
+								tmpFile = new File(this.app.getServerConfig().root + File.separator + dir_index);
+								if (tmpFile.exists()){
+									break;
+								}
+							}
+							if(tmpFile.exists()){
+								response.send(tmpFile);
+							}else{
+								response.send(404, "Cannot {m} {r}".replace("{m}", request.getMethod()).replace("{r}", request.getPath()));
+							}
+						}else{
+							response.send(404, "Cannot {m} {r}".replace("{m}", request.getMethod()).replace("{r}", request.getPath()));
+						}
 					}
 				} else {
 					handler.onExecute(request, response);
