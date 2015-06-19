@@ -43,6 +43,7 @@ public class ConnectionHandler implements Runnable {
 			onStart();
 			onParseBody();
 			if (request != null) {
+				response.appendHeader("Server", "JHttpServer");
 				if (app.getServerConfig().cors){
 					response.appendHeader("Access-Control-Allow-Origin", "*");
 				}
